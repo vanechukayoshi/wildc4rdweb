@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wild C4rd — Storyline</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Orbitron', sans-serif;
+    background: #000;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+/* BACKGROUND */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background:
+        radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 40%),
+        radial-gradient(circle at bottom, rgba(255,255,255,0.03), transparent 30%);
+
+    animation: bgMove 10s linear infinite;
+
+    z-index: -2;
+}
+
+@keyframes bgMove {
+    0% {
+        transform: translate(0,0);
+    }
+
+    50% {
+        transform: translate(-2%, -2%);
+    }
+
+    100% {
+        transform: translate(0,0);
+    }
+}
+
+/* ROAD LINES */
+.road-lines {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    opacity: 0.08;
+}
+
+.line {
+    position: absolute;
+    width: 2px;
+    height: 120px;
+    background: #fff;
+
+    animation: lineMove linear infinite;
+}
+
+.line:nth-child(1){ left:20%; animation-duration: 5s; }
+.line:nth-child(2){ left:35%; animation-duration: 6s; }
+.line:nth-child(3){ left:50%; animation-duration: 4s; }
+.line:nth-child(4){ left:65%; animation-duration: 5.5s; }
+.line:nth-child(5){ left:80%; animation-duration: 4.5s; }
+
+@keyframes lineMove {
+    from {
+        top: -150px;
+    }
+
+    to {
+        top: 120%;
+    }
+}
+
+/* HERO */
+.hero {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.hero h1 {
+    font-size: 62px;
+    letter-spacing: 10px;
+
+    text-shadow:
+        0 0 10px #fff,
+        0 0 30px rgba(255,255,255,0.7);
+
+    animation: glow 2s infinite alternate;
+}
+
+.hero p {
+    margin-top: 15px;
+
+    color: #aaa;
+    letter-spacing: 4px;
+    font-size: 13px;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px #777;
+    }
+
+    to {
+        text-shadow:
+            0 0 15px #fff,
+            0 0 35px rgba(255,255,255,0.9);
+    }
+}
+
+/* SCROLL */
+.scroll-text {
+    margin-top: 60px;
+
+    font-size: 11px;
+    color: #777;
+
+    letter-spacing: 5px;
+
+    animation: fadeLoop 1.5s infinite;
+}
+
+@keyframes fadeLoop {
+    0% { opacity: 0.2; }
+    50% { opacity: 1; }
+    100% { opacity: 0.2; }
+}
+
+/* STORY AREA */
+.story-container {
+    width: 100%;
+    max-width: 950px;
+
+    margin: auto;
+    padding: 20px;
+}
+
+.story-card {
+    position: relative;
+
+    padding: 40px 30px;
+    margin-bottom: 40px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,0.06),
+            rgba(255,255,255,0.02)
+        );
+
+    border: 1px solid rgba(255,255,255,0.12);
+
+    backdrop-filter: blur(12px);
+
+    overflow: hidden;
+
+    opacity: 0;
+    transform: translateY(40px);
+
+    transition: 1s;
+}
+
+.story-card.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.story-card::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            120deg,
+            transparent,
+            rgba(255,255,255,0.18),
+            transparent
+        );
+
+    transform: translateX(-100%);
+
+    animation: swipe 6s linear infinite;
+}
+
+@keyframes swipe {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.story-number {
+    font-size: 12px;
+    letter-spacing: 5px;
+    color: #888;
+
+    margin-bottom: 14px;
+}
+
+.story-title {
+    font-size: 28px;
+    letter-spacing: 4px;
+
+    margin-bottom: 20px;
+
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.story-text {
+    line-height: 2;
+    color: #cfcfcf;
+
+    font-size: 14px;
+}
+
+/* QUOTE */
+.quote-box {
+    margin-top: 25px;
+
+    padding: 20px;
+
+    border-left: 2px solid rgba(255,255,255,0.5);
+
+    color: #fff;
+
+    font-size: 13px;
+    letter-spacing: 2px;
+
+    background: rgba(255,255,255,0.03);
+}
+
+/* FINAL */
+.final-section {
+    text-align: center;
+
+    padding: 120px 20px;
+}
+
+.final-section h2 {
+    font-size: 40px;
+    letter-spacing: 8px;
+
+    margin-bottom: 20px;
+
+    text-shadow:
+        0 0 10px #fff,
+        0 0 30px rgba(255,255,255,0.5);
+}
+
+.final-section p {
+    color: #888;
+    letter-spacing: 4px;
+
+    font-size: 12px;
+}
+
+/* MOBILE */
+@media (max-width:768px){
+
+    .hero h1 {
+        font-size: 36px;
+        letter-spacing: 6px;
+    }
+
+    .hero p {
+        font-size: 11px;
+        letter-spacing: 2px;
+    }
+
+    .story-card {
+        padding: 30px 20px;
+    }
+
+    .story-title {
+        font-size: 22px;
+    }
+
+    .story-text {
+        font-size: 13px;
+        line-height: 1.9;
+    }
+
+    .final-section h2 {
+        font-size: 26px;
+    }
+}
+/* BACK BUTTON */
+.back-btn {
+    position: fixed;
+
+    top: 20px;
+    left: 20px;
+
+    padding: 12px 18px;
+
+    border-radius: 14px;
+
+    text-decoration: none;
+    color: #fff;
+
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-weight: 700;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,0.08),
+            rgba(255,255,255,0.02)
+        );
+
+    border: 1px solid rgba(255,255,255,0.2);
+
+    backdrop-filter: blur(10px);
+
+    z-index: 999;
+
+    transition: 0.3s;
+
+    box-shadow:
+        0 0 10px rgba(255,255,255,0.08);
+}
+
+.back-btn:hover {
+    transform: scale(1.05);
+
+    border-color: rgba(255,255,255,0.7);
+
+    box-shadow:
+        0 0 15px rgba(255,255,255,0.5),
+        0 0 40px rgba(255,255,255,0.15);
+}
+</style>
+</head>
+
+<body>
+    <a href="index.html" class="back-btn">
+    MAIN PAGE
+</a>
+
+<div class="road-lines">
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+</div>
+
+<section class="hero">
+    <h1>STORYLINE</h1>
+    <p>WILD C4RD • STATESIDE ARCHIVE</p>
+
+    <div class="scroll-text">
+        SCROLL TO ENTER
+    </div>
+</section>
+
+<div class="story-container">
+
+    <div class="story-card">
+        <div class="story-number">CHAPTER 01</div>
+        <div class="story-title">RESPECT FIRST</div>
+
+        <div class="story-text">
+            WILD C4RD adalah nama yang bisa diartikan sebagai ikatan persahabatan yang mewakili satu sama lain karena alasan tertentu. Klub ini tercipta dari emosi yang tidak terkendali akibat perlakuan tidak sopan dari mantan klub Zemo Shaw. Karena dianggap tidak hormat oleh Shaw, meski sering mendapat bantuan di klub lamanya, ia ingin membuat klub yang memupuk rasa saling menghormati antar sesama anggota dan atasannya. Dia akhirnya memutuskan untuk membuat klubnya sendiri dan membuktikan nilainya kepada klub barunya. Shaw terkadang dianggap sebagai seseorang yang lebih suka bekerja sendiri tanpa bantuan mantan rekan satu klubnya. Alhasil saat ajang balapan, ia terkadang diremehkan dan terkadang diabaikan karena berada di tempat yang sama dengan anggota lainnya. Dia selalu mendengar komentar tidak menyenangkan setelah setiap balapan, yang membuatnya merasa diperlakukan tidak adil oleh teman-temannya sebelumnya, sehingga membuatnya ingin membuat klub yang sangat mematuhi aturan yang menghormati satu sama lain.
+        </div>
+
+        <div class="quote-box">
+            “Where Respect Becomes Power.”
+        </div>
+    </div>
+
+    <div class="story-card">
+        <div class="story-number">CHAPTER 02</div>
+        <div class="story-title">SHARED VISION</div>
+
+        <div class="story-text">
+            Shaw akhirnya keluar dari klub tersebut dan mencari teman untuk membentuk klub. Ia akhirnya menceritakan niatnya tersebut kepada sahabat lamanya yang sudah lama tidak ia temui, Jericho Dominguez. Richo pun merasa klub lamanya juga melakukan hal serupa hingga membuatnya meninggalkan klub lamanya juga. Shaw dan Richo merasa masih memiliki banyak potensi yang belum dimanfaatkan oleh klub lamanya. Setelah berbincang cukup lama, akhirnya mereka berdua berpikir bagaimana jika mereka sama-sama membentuk sebuah grup namun harus memiliki rasa saling menghormati yang tinggi.
+        </div>
+
+        <div class="quote-box">
+            “A New Club Born From Shared Pain.”
+        </div>
+    </div>
+
+    <div class="story-card">
+        <div class="story-number">CHAPTER 03</div>
+        <div class="story-title">WILD GAMBLE</div>
+
+        <div class="story-text">
+            Richo akhirnya bergabung dengan Shaw dan membantunya menemukan calon anggota di dunia balap ilegal. Mereka berdua memutuskan untuk memberi nama WILD C4RD, sebuah istilah yang biasa digunakan dalam dunia perjudian atau kasino. Mereka berdua ingin membuktikan bahwa mereka bisa memiliki anggota lebih banyak dari klub lamanya. Setelah berdiskusi, mereka berdua memutuskan untuk berpisah dan bersatu kembali setelah mereka menemukan anggota yang tepat untuk klub mereka.
+        </div>
+
+        <div class="quote-box">
+            “A Name Born From Risk And Ambition.”
+        </div>
+    </div>
+
+    <div class="story-card">
+        <div class="story-number">CHAPTER 04</div>
+        <div class="story-title">BLACKLIST #2</div>
+
+        <div class="story-text">
+            Beberapa hari kemudian, Richo tiba-tiba menelepon Shaw dan menyuruhnya menemuinya di lokasi yang telah mereka berdua sepakati sebelumnya. Shaw akhirnya berangkat ke lokasi yang telah mereka sepakati untuk bertemu Richo, keduanya sempat berdiskusi bagaimana kelanjutan klub mereka kedepannya. Tiba-tiba seseorang muncul dan Richo memberitahu Shaw bahwa orang yang datang adalah orang ketiga di klub mereka. Orang tersebut turun dari mobilnya dan berjalan menuju Shaw, Shaw merasa belum pernah bertemu dengan orang di depannya. Orang tersebut memperkenalkan dirinya kepada Shaw dan ternyata orang tersebut bernama Kyoto Nakagawa. Kyo mengaku masih baru di kota ini namun sudah cukup berpengalaman di dunia balap liar. Shaw dan Richo akhirnya melanjutkan pembicaraan mereka yang langsung didengar oleh Kyoto. Shaw sempat mengatakan bahwa dia sedang menghubungi seseorang dan mengajaknya bergabung yang berasal dari jaringan StreetNET. Orang yang masih dihubungi Shaw adalah Ginz Kayoshi, orang nomor dua di daftar hitam StreetNET. Richo pun langsung kaget mendengar nama tersebut, ia mengatakan bahwa seseorang yang berada di blacklist kedua tidak mungkin mau bergabung dengan mereka yang masih noob di dunia balap.
+        </div>
+
+        <div class="quote-box">
+            “A New Face Entered The Story.”
+        </div>
+    </div>
+    
+    <div class="story-card">
+        <div class="story-number">CHAPTER 05</div>
+        <div class="story-title">NEW BEGINNING</div>
+
+        <div class="story-text">
+            Shaw mengatakan kepada mereka untuk tidak meremehkan diri mereka sendiri, dan dia mengatakan kepada mereka bahwa dia akan menghubungi mereka berdua jika Ginz merespons. Beberapa minggu kemudian, Shaw menghubungi Richo untuk menemuinya di lokasi yang dia kirim dan memintanya untuk mengundang Kyoto untuk datang ke lokasi yang dia kirim. Saat Richo sampai di lokasi yang dia kirim, dia merasakan wajah yang familiar. Saat keluar dari mobilnya, Richo terkejut melihat orang di depan Shaw adalah anggota daftar hitam nomor dua, Ginz Kayoshi. Richo segera turun dari mobilnya untuk mengetahui apakah itu Kayoshi atau bukan. Saat Richo berdiri di samping Shaw, ia langsung memperkenalkan Richo kepada Ginz dan mengatakan bahwa Richo adalah teman lamanya yang bersedia membantunya mencari anggota. Tak lama setelah Richo tiba, Kyoto akhirnya datang dan langsung menyapa Shaw dan Richo yang sedang berbincang dengan Ginz, Ginz kaget kenapa banyak sekali orang yang datang namun Shaw langsung memperkenalkan Kyoto pada Ginz dan mengatakan bahwa Kyoto adalah orang yang diajak Richo untuk bergabung dengan klub yang akan mereka buat, di akhir pembicaraan Ginz akan mencoba mengajak teman-temannya untuk bergabung dengan klub mereka nanti, akhirnya mereka berpisah dan Shaw berkata bahwa dia akan mengirimkan lokasi di mana mereka akan bertemu lagi.
+        </div>
+
+        <div class="quote-box">
+            “The Streets Went Silent When Ginz Arrived.”
+        </div>
+    </div>
+    
+    <div class="story-card">
+        <div class="story-number">CHAPTER 06</div>
+        <div class="story-title">NEW MOVEMENT</div>
+
+        <div class="story-text">
+            Beberapa hari kemudian mereka akhirnya bertemu kembali dan Ginz membawa satu orang baru untuk bertemu Shaw dan yang lainnya, kedua orang tersebut adalah Nichol Gallagher dan Nara Hunter. Mereka keenam akhirnya memulai perbincangan tentang bagaimana klub ini akan pergi dan kemana mereka akan berkumpul, tidak mungkin mereka keenam terus berpindah dari satu lokasi ke lokasi lain seperti sekarang. Shaw akhirnya menjawab semua pertanyaan dengan sangat cepat dan tanpa basa-basi lagi. Akhirnya setelah mereka berbincang cukup lama, mereka sepakat untuk menggunakan nama yang diberitahukan Shaw kepada mereka, WILD C4RD. Mereka merasa beberapa pembalap jalanan tidak diperlakukan sama dengan pembalap jalanan hebat lainnya, oleh karena itu mereka ingin perlakuan di jalanan juga sama. Akhirnya keenamnya memutuskan untuk mencari beberapa pembalap jalanan yang merasa tertindas oleh pembalap yang menganggap dirinya adalah orang-orang hebat.
+        </div>
+
+        <div class="quote-box">
+            “WILD C4RD Finally Became Reality.”
+        </div>
+    </div>
+
+</div>
+
+<section class="final-section">
+    <h2>THE STORY CONTINUES</h2>
+    <p>NO FINISH LINE • NO LIMITS</p>
+</section>
+
+<script>
+const cards = document.querySelectorAll('.story-card');
+
+window.addEventListener('scroll', () => {
+    cards.forEach(card => {
+        const top = card.getBoundingClientRect().top;
+
+        if(top < window.innerHeight - 100){
+            card.classList.add('show');
+        }
+    });
+});
+</script>
+
+</body>
+</html>
