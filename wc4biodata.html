@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wild C4rd Members</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    background: radial-gradient(circle at top, #0d0d0d, #050505 70%);
+    color: #e6e6e6;
+    overflow-x: hidden;
+}
+
+/* Neon Silver Glow Background */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle, rgba(200,200,200,0.08), transparent 70%);
+    animation: bgMove 12s linear infinite;
+    z-index: -1;
+}
+
+@keyframes bgMove {
+    0% { transform: translate(0,0); }
+    50% { transform: translate(-3%, -3%); }
+    100% { transform: translate(0,0); }
+}
+
+header {
+    text-align: center;
+    padding: 30px 10px;
+}
+
+header h1 {
+    font-size: 36px;
+    letter-spacing: 5px;
+    color: #c0c0c0;
+    text-shadow: 0 0 10px #c0c0c0, 0 0 25px #9f9f9f;
+    animation: glowSilver 2s infinite alternate;
+}
+
+@keyframes glowSilver {
+    from { text-shadow: 0 0 10px #bfbfbf; }
+    to { text-shadow: 0 0 25px #ffffff; }
+}
+
+/* Music Button */
+.music-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(192,192,192,0.08);
+    border: 2px solid #6e6e6e;
+    color: #aaa;
+    padding: 12px 18px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: 0.3s;
+    z-index: 1000;
+}
+
+/* Neon aktif */
+.music-btn.active {
+    border-color: #ffffff;
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(255,255,255,0.6),
+                0 0 30px rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.05);
+}
+
+/* Grid Layout */
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Diperlebar sedikit untuk ruang stat */
+    gap: 25px;
+    padding: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Card Neon Silver */
+.card {
+    background: rgba(20,20,20,0.9);
+    border-radius: 18px;
+    padding: 15px;
+    text-align: center;
+    border: 1px solid rgba(192,192,192,0.5);
+    box-shadow: 0 0 15px rgba(255,255,255,0.15);
+    transition: 0.4s;
+    animation: floatCard 4s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* Floating Animation */
+@keyframes floatCard {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+/* Glow Pulse */
+.card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    box-shadow: 0 0 25px rgba(255,255,255,0.25);
+    opacity: 0;
+    transition: 0.4s;
+}
+
+.card:hover::after {
+    opacity: 1;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    border-color: #ffffff;
+    box-shadow: 0 0 30px rgba(255,255,255,0.6);
+}
+
+/* Shimmer Border Effect */
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    padding: 1px; 
+    background: linear-gradient(
+        120deg,
+        transparent 20%,
+        rgba(255,255,255,0.8) 40%,
+        rgba(255,255,255,1) 50%,
+        rgba(255,255,255,0.8) 60%,
+        transparent 80%
+    );
+    background-size: 200% 200%;
+    animation: borderShine 3s linear infinite;
+    -webkit-mask: 
+        linear-gradient(#000 0 0) content-box, 
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+}
+
+@keyframes borderShine {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Image 3:4 Ratio */
+.avatar {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(255,255,255,0.4);
+    transition: filter 0.3s;
+}
+
+.rank {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #bfbfbf;
+}
+
+.name {
+    font-size: 17px;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+/* =========================
+   STATS BAR CSS (NEW)
+========================= */
+.stats-container {
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.2);
+    text-align: left;
+}
+
+.stat-row {
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    font-size: 10px;
+    color: #cfcfcf;
+    letter-spacing: 1.5px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.stat-label span:last-child {
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 5px rgba(255,255,255,0.5);
+}
+
+.stat-bar-bg {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.stat-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #666, #ffffff);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+    border-radius: 4px;
+    transform-origin: left;
+    animation: fillStats 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes fillStats {
+    0% { transform: scaleX(0); opacity: 0; }
+    100% { transform: scaleX(1); opacity: 1; }
+}
+
+/* =========================
+   SILVER CYBER GLITCH
+========================= */
+
+.avatar.glitch {
+    animation: glitchSilver 0.35s linear;
+}
+
+@keyframes glitchSilver {
+    0% { transform: translate(0); filter: none; }
+    20% { transform: translate(-3px, 2px); filter: brightness(2); }
+    40% { transform: translate(3px, -2px); filter: contrast(2); }
+    60% { transform: translate(-2px, 1px); filter: grayscale(1) brightness(1.8); }
+    80% { transform: translate(2px, -1px); filter: brightness(2.2); }
+    100% { transform: translate(0); filter: none; }
+}
+
+/* Silver Flash Overlay */
+.card.glitching::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    background: linear-gradient(
+        120deg,
+        rgba(255,255,255,0.1),
+        rgba(255,255,255,0.6),
+        rgba(255,255,255,0.1)
+    );
+    opacity: 0;
+    animation: silverFlash 0.35s linear;
+    pointer-events: none;
+}
+
+@keyframes silverFlash {
+    0% { opacity: 0; }
+    50% { opacity: 0.6; }
+    100% { opacity: 0; }
+}
+
+.top-button {
+    position: fixed;
+    top: 15px;
+    left: 20px;
+    z-index: 999;
+}
+
+.top-button a {
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 7px 16px;
+    border-radius: 8px;
+    color: #cfcfcf;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.08); 
+    backdrop-filter: blur(10px);
+    background-clip: padding-box;
+    transition: 0.3s;
+}
+
+.top-button a:hover {
+    color: #fff;
+    border-color: #fff;
+    box-shadow: 0 0 12px rgba(255,255,255,0.5);
+}
+/* =========================
+   HIGH STATS RED GLOW (90+)
+========================= */
+.stat-bar-fill.high-stat {
+    background: linear-gradient(90deg, #660000, #ff1a1a);
+    box-shadow: 0 0 10px rgba(255, 26, 26, 0.8);
+}
+
+.stat-label.high-stat-text span:last-child {
+    color: #ff4d4d;
+    text-shadow: 0 0 8px rgba(255, 77, 77, 0.6);
+}
+/* =========================
+   BIO MODAL CSS
+========================= */
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 2000;
+    inset: 0;
+    background-color: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: rgba(15,15,15,0.95);
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 30px rgba(255,255,255,0.3);
+    width: 90%;
+    max-width: 500px;
+    border-radius: 20px;
+    padding: 25px;
+    position: relative;
+    animation: zoomIn 0.3s ease-out;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    color: #aaa;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.close-button:hover { color: #fff; }
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+#modalImg {
+    width: 150px;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid #fff;
+}
+
+/* =========================
+   BIO MODAL CSS (SIMPLIFIED FONT)
+========================= */
+.bio-info h2 { 
+    margin: 0; 
+    letter-spacing: 2px; 
+    color: #fff; 
+    text-transform: uppercase;
+    font-family: 'Orbitron', sans-serif; /* Nama tetap pakai Orbitron agar tegas */
+}
+
+.bio-info p { 
+    color: #aaa; 
+    font-size: 13px; 
+    font-family: 'Inter', sans-serif; /* Font simpel */
+}
+
+#modalDescription {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #d1d1d1;
+    text-align: left; /* Ganti ke left agar lebih natural dibaca */
+    font-family: 'Inter', sans-serif; /* Font simpel untuk teks panjang */
+    font-weight: 300; /* Tipis agar terlihat bersih */
+}
+
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="top-button">
+        <a href="index.html">MAIN PAGE</a>
+    </div>
+    <h1>WILD C4RD</h1>
+    <p style="margin-top:10px; font-size:12px; letter-spacing:2px; color:#aaaaaa;">
+        CLICK ON THE CARD TO SEE DETAILS ABOUT THE CHARACTER
+    </p>
+</header>
+
+<div class="container">
+    <div class="card">
+        <img class="avatar" src="https://i.imgur.com/MawFhTz.gif" data-alt="https://i.imgur.com/yBG38Av.png">
+        <div class="rank">Porsche 911</div>
+        <div class="name">Ginz Kayoshi</div>
+        <div class="stats-container">
+            <div class="stat-row">
+                <div class="stat-label"><span>SPEED</span> <span>80%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 80%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONTROL</span> <span>85%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 85%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONSISTENT</span> <span>82%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 82%;"></div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <img class="avatar" src="https://i.imgur.com/7uL0eGK.png" data-alt="https://i.imgur.com/TmZLyy6.png">
+        <div class="rank">Ferrari 512 TR</div>
+        <div class="name">Lopez Vanduka</div>
+        <div class="stats-container">
+            <div class="stat-row">
+                <div class="stat-label"><span>SPEED</span> <span>99%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 99%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONTROL</span> <span>99%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 99%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONSISTENT</span> <span>99%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 99%;"></div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <img class="avatar" src="https://i.imgur.com/gga5jBv.png" data-alt="https://i.imgur.com/4lSOxUn.png">
+        <div class="rank">Ferrari 512 TR</div>
+        <div class="name">Cole Howard</div>
+        <div class="stats-container">
+            <div class="stat-row">
+                <div class="stat-label"><span>SPEED</span> <span>75%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 75%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONTROL</span> <span>76%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 76%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONSISTENT</span> <span>77%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 77%;"></div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <img class="avatar" src="https://i.imgur.com/5uJDjwo.png" data-alt="https://i.imgur.com/vWr8Jue.png">
+        <div class="rank">1989 Ferrari F40</div>
+        <div class="name">Caesar Morrison</div>
+        <div class="stats-container">
+            <div class="stat-row">
+                <div class="stat-label"><span>SPEED</span> <span>70%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 70%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONTROL</span> <span>68%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 68%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONSISTENT</span> <span>68%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 68%;"></div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <img class="avatar" src="https://i.imgur.com/4OxcENz.png" data-alt="https://i.imgur.com/q6ejl7E.png">
+        <div class="rank">Porsche 911</div>
+        <div class="name">Nichol Gallagher</div>
+        <div class="stats-container">
+            <div class="stat-row">
+                <div class="stat-label"><span>SPEED</span> <span>80%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 80%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONTROL</span> <span>80%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 80%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONSISTENT</span> <span>79%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 79%;"></div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <img class="avatar" src="https://i.imgur.com/9DH9JmZ.png" data-alt="https://i.imgur.com/8p5tZy8.png">
+        <div class="rank">Alpine A110S</div>
+        <div class="name">Desmond Bob</div>
+        <div class="stats-container">
+            <div class="stat-row">
+                <div class="stat-label"><span>SPEED</span> <span>80%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 80%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONTROL</span> <span>82%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 82%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONSISTENT</span> <span>85%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 85%;"></div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <img class="avatar" src="https://i.imgur.com/N1fgT1r.png" data-alt="https://i.imgur.com/f3DxNeH.png">
+        <div class="rank">Porsche Cayman</div>
+        <div class="name">Takashi Hiroo</div>
+        <div class="stats-container">
+            <div class="stat-row">
+                <div class="stat-label"><span>SPEED</span> <span>80%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 80%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONTROL</span> <span>84%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 84%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONSISTENT</span> <span>80%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 80%;"></div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <img class="avatar" src="https://i.imgur.com/L42gz6H.png" data-alt="https://i.imgur.com/c7fT1yH.png">
+        <div class="rank">BMW e36</div>
+        <div class="name">Thomas Alvares</div>
+        <div class="stats-container">
+            <div class="stat-row">
+                <div class="stat-label"><span>SPEED</span> <span>80%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 80%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONTROL</span> <span>83%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 83%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONSISTENT</span> <span>81%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 81%;"></div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <img class="avatar" src="https://i.imgur.com/DhbUeVG.png" data-alt="https://i.imgur.com/rP3mKqv.png">
+        <div class="rank">Ferrari 512 TR</div>
+        <div class="name">Kenn Brooklyn</div>
+        <div class="stats-container">
+            <div class="stat-row">
+                <div class="stat-label"><span>SPEED</span> <span>78%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 78%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONTROL</span> <span>76%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 76%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONSISTENT</span> <span>77%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 77%;"></div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <img class="avatar" src="https://i.imgur.com/tbSw5nS.png" data-alt="https://i.imgur.com/M8Yx665.png">
+        <div class="rank">Ferrari 512 TR</div>
+        <div class="name">Charles Jeff</div>
+        <div class="stats-container">
+            <div class="stat-row">
+                <div class="stat-label"><span>SPEED</span> <span>75%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 75%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONTROL</span> <span>77%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 77%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONSISTENT</span> <span>75%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 75%;"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img class="avatar" src="https://i.imgur.com/nr7GAOO.png" data-alt="https://i.imgur.com/YfGpVZV.png">
+        <div class="rank">Ferrari 512 TR</div>
+        <div class="name">Tacito Jose</div>
+        <div class="stats-container">
+            <div class="stat-row">
+                <div class="stat-label"><span>SPEED</span> <span>79%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 79%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONTROL</span> <span>80%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 80%;"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label"><span>CONSISTENT</span> <span>78%</span></div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 78%;"></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button class="music-btn" id="musicBtn" onclick="toggleMusic()">PLAY🎵</button>
+
+<audio id="bgMusic" loop>
+  <source src="https://github.com/vanechukayoshi/Audioweb/raw/refs/heads/main/SpotiDown.App%20-%20Tell%20Me%20Why%20-%20MEDUZA%20Remix%20-%20Supermode.mp3" type="audio/mp3">
+</audio>
+
+<script>
+let music = document.getElementById("bgMusic");
+let btn = document.getElementById("musicBtn");
+let isPlaying = false;
+
+function toggleMusic(){
+    if(!isPlaying){
+        music.play();
+        btn.classList.add("active");
+        btn.innerHTML = "PAUSE🎵";
+        isPlaying = true;
+    } else {
+        music.pause();
+        btn.classList.remove("active");
+        btn.innerHTML = "PLAY🎵";
+        isPlaying = false;
+    }
+}
+</script>
+
+<script>
+// Database Bio (Bisa kamu isi sesuai cerita karaktermu)
+const bioData = {
+    "Ginz Kayoshi": "Ginz Kayoshi, yang lebih dikenal sebagai EA, dulunya adalah pembalap tangguh di seri balap ketahanan paling bergengsi. Namun, masa kejayaannya kini hanya tinggal bayangan. Sekarang, Ginz telah memilih jalan yang lebih berbahaya, meninggalkan sirkuit resmi dan membangkitkan kembali adrenalinnya di dunia gelap balap jalanan.",
+    "Lopez Vanduka": "Lopez Vanduka atau dikenal sebagai LB, adalah seorang pencinta mobil Eropa, terutama produk Ferrari 512TR. Dan ketika ia memiliki satu unit, ia langsung memodifikasi kendaraannya dengan mesin yang kencang dan bagus. Ia juga membongkar mesinnya, dan terciptalah Ferrari 512TR yang kencang dan tangguh di jalan. Lopez sangat senang dan tidak menyia-nyiakan waktu untuk terus meningkatkan mobilnya.",
+    "Lucia Xumena": "Spesialis sprint jarak pendek. Mercedes-AMG miliknya telah dimodifikasi khusus untuk akselerasi instan.",
+    "Kenn Brooklyn": " Kenn dibesarkan di lingkungan perkotaan yang keras di mana suara mesin dan lampu malam adalah bagian dari kehidupan. Ketertarikannya pada balap jalanan dimulai dengan keinginan untuk membuktikan dirinya. Namun, seiring waktu, ia mulai menyadari konsekuensi serius dari balap ilegal, bahaya bagi dirinya sendiri dan orang lain, yang membuatnya mempertimbangkan balap legal."
+    // Tambahkan nama karakter lain di sini...
+};
+
+document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', (e) => {
+        const name = card.querySelector('.name').innerText;
+        const rank = card.querySelector('.rank').innerText;
+        const imgSrc = card.querySelector('.avatar').src;
+
+        // Munculkan Modal
+        const modal = document.getElementById("bioModal");
+        document.getElementById("modalName").innerText = name;
+        document.getElementById("modalRank").innerText = rank;
+        document.getElementById("modalImg").src = imgSrc;
+        document.getElementById("modalDescription").innerText = bioData[name] || "Biodata belum tersedia untuk anggota ini.";
+        
+        modal.style.display = "flex";
+    });
+});
+
+function closeBio() {
+    document.getElementById("bioModal").style.display = "none";
+}
+
+// Tutup modal jika klik di luar area konten
+window.onclick = function(event) {
+    const modal = document.getElementById("bioModal");
+    if (event.target == modal) {
+        closeBio();
+    }
+}
+</script>
+<script>
+// Auto-detect stat 90 ke atas dan ubah jadi merah
+document.querySelectorAll('.stat-row').forEach(row => {
+    // Ambil elemen angka (misal "94%")
+    const statTextElement = row.querySelector('.stat-label span:last-child');
+    const statValueText = statTextElement.innerText;
+    
+    // Ubah teks menjadi angka bulat (menghilangkan simbol %)
+    const statValue = parseInt(statValueText);
+    
+    // Jika nilainya 90 atau lebih, tambahkan class warna merah
+    if (statValue >= 90) {
+        row.querySelector('.stat-bar-fill').classList.add('high-stat');
+        row.querySelector('.stat-label').classList.add('high-stat-text');
+    }
+});
+</script>
+
+<div id="bioModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeBio()">&times;</span>
+        <div class="modal-body">
+            <img id="modalImg" src="" alt="Avatar">
+            <div class="bio-info">
+                <h2 id="modalName">Name</h2>
+                <p id="modalRank">Car Model</p>
+                <hr>
+                <div id="modalDescription">
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
