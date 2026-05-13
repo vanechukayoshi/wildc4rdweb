@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>WILD C4RD Gallery</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* --- RESET & BASE --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(0,183,255,0.15), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(255,0,85,0.15), transparent 30%),
+    #06070b;
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* --- BACKGROUND BLUR & SPARKS --- */
+.bg {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.blur {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  filter: blur(150px);
+  animation: floatOrb 10s infinite alternate ease-in-out;
+  opacity: 0.6;
+}
+
+.blur.one {
+  background: #00b7ff;
+  top: -100px;
+  left: -100px;
+}
+
+.blur.two {
+  background: #ff0055;
+  bottom: -100px;
+  right: -100px;
+  animation-delay: -5s;
+}
+
+@keyframes floatOrb {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(50px) scale(1.2); }
+}
+
+/* Floating Sparks */
+.spark {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #00b7ff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 2px #00b7ff;
+  opacity: 0;
+  animation: flyUp 5s linear infinite;
+}
+
+@keyframes flyUp {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  20% { opacity: 1; transform: translateY(80vh) scale(1); }
+  80% { opacity: 1; }
+  100% { transform: translateY(-10vh) scale(0); opacity: 0; }
+}
+
+/* --- MAIN CONTAINER --- */
+.container {
+  width: 100%;
+  max-width: 1300px;
+  background: rgba(10, 10, 15, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 35px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 50px 30px;
+  overflow: hidden;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  animation: fadeUp 1s ease-out forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- HEADER --- */
+.top {
+  text-align: center;
+  animation: fadeUp 1s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+.mini {
+  color: #00b7ff;
+  letter-spacing: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Orbitron', sans-serif;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  animation: neonPulse 2s ease-in-out infinite;
+}
+
+.title {
+  font-family: 'Orbitron', sans-serif;
+  color: white;
+  font-size: 52px;
+  line-height: 1.1;
+  margin-bottom: 15px;
+  text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+.desc {
+  color: #a0a0a0;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+/* --- CATEGORY --- */
+.category {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  animation: fadeUp 1s ease-out 0.4s forwards;
+  opacity: 0;
+}
+
+.category button {
+  padding: 10px 24px;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.03);
+  color: #a0a0a0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.category button:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.category button.active {
+  background: #00b7ff;
+  color: #000;
+  border-color: #00b7ff;
+  box-shadow: 0 0 20px rgba(0,183,255,0.4), inset 0 0 10px rgba(255,255,255,0.5);
+  font-weight: 700;
+}
+
+/* --- SLIDER --- */
+.slider-wrap {
+  position: relative;
+  margin-top: 50px;
+  animation: fadeUp 1s ease-out 0.6s forwards;
+  opacity: 0;
+}
+
+.slider {
+  overflow: hidden;
+  width: 100%;
+  border-radius: 30px;
+}
+
+.track {
+  display: flex;
+  transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.card {
+  flex: 0 0 100%;
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+}
+
+.card-inner {
+  width: 100%;
+  max-width: 420px;
+  height: 550px;
+  border-radius: 25px;
+  overflow: hidden;
+  position: relative;
+  background: #111;
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+}
+
+/* Hover Effect pada Kartu */
+.card-inner:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,183,255,0.2), 0 0 20px rgba(0,183,255,0.1);
+  border-color: rgba(0,183,255,0.3);
+}
+
+.card-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.card-inner:hover img {
+  transform: scale(1.08);
+}
+
+.overlay {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 40px 30px 30px;
+  background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.5) 60%, transparent);
+  transition: padding-bottom 0.3s ease;
+}
+
+.card-inner:hover .overlay {
+  padding-bottom: 40px;
+}
+
+.overlay h2 {
+  color: white;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 28px;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+  transition: color 0.3s;
+}
+
+.card-inner:hover .overlay h2 {
+  color: #00b7ff;
+}
+
+.overlay p {
+  color: #b7b7b7;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+/* --- NAVIGASI --- */
+.nav {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  padding: 0 10px;
+}
+
+.nav button {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(10,10,15,0.5);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  pointer-events: auto;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav button:hover {
+  background: #00b7ff;
+  color: #000;
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(0,183,255,0.5);
+  border-color: #00b7ff;
+}
+
+/* --- DOTS --- */
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+  animation: fadeUp 1s ease-out 0.8s forwards;
+  opacity: 0;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.dot.active {
+  background: #00b7ff;
+  width: 25px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px #00b7ff;
+}
+
+/* --- TOP BUTTON --- */
+.top-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 998;
+}
+
+.top-button a {
+  text-decoration: none;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 10px 20px;
+  border-radius: 30px;
+  color: #cfcfcf;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(15px);
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.top-button a:hover {
+  color: #fff;
+  border-color: #00b7ff;
+  background: rgba(0,183,255,0.1);
+  box-shadow: 0 0 15px rgba(0,183,255,0.4);
+}
+
+/* --- POPUP GALLERY --- */
+.popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 999;
+  padding: 20px;
+}
+
+.popup.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.popup-box {
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  background: rgba(13, 15, 21, 0.9);
+  border-radius: 25px;
+  overflow: hidden;
+  transform: scale(0.9) translateY(30px);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 30px rgba(0,183,255,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.popup.active .popup-box {
+  transform: scale(1) translateY(0);
+}
+
+.popup-top {
+  padding: 25px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: rgba(0,0,0,0.3);
+}
+
+.popup-top h2 {
+  color: white;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 22px;
+  letter-spacing: 1px;
+}
+
+#closePopup {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.3s ease;
+  font-size: 18px;
+}
+
+#closePopup:hover {
+  background: #ff0055;
+  border-color: #ff0055;
+  transform: rotate(90deg);
+  box-shadow: 0 0 15px rgba(255,0,85,0.5);
+}
+
+.popup-gallery {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* Staggered Animation untuk gambar di dalam Popup */
+.popup-gallery img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.popup.active .popup-gallery img {
+  animation: popUpFade 0.5s forwards ease-out;
+}
+
+/* Memberikan delay yang berbeda tiap gambar */
+.popup.active .popup-gallery img:nth-child(1) { animation-delay: 0.1s; }
+.popup.active .popup-gallery img:nth-child(2) { animation-delay: 0.2s; }
+.popup.active .popup-gallery img:nth-child(3) { animation-delay: 0.3s; }
+.popup.active .popup-gallery img:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes popUpFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.popup-gallery img:hover {
+  transform: scale(1.03) !important; /* Override animasi saat dihover */
+  box-shadow: 0 10px 25px rgba(0,183,255,0.3);
+  border-color: rgba(0,183,255,0.5);
+}
+
+.popup-gallery::-webkit-scrollbar { width: 8px; }
+.popup-gallery::-webkit-scrollbar-track { background: #0a0a0a; }
+.popup-gallery::-webkit-scrollbar-thumb { background: #00b7ff; border-radius: 10px; }
+
+/* --- KEYFRAMES NEON --- */
+@keyframes neonPulse {
+  0%, 100% {
+    text-shadow: 0 0 5px #00b7ff, 0 0 10px #00b7ff, 0 0 20px rgba(0,183,255,0.5);
+  }
+  50% {
+    text-shadow: 0 0 8px #00b7ff, 0 0 15px #00b7ff, 0 0 30px rgba(0,183,255,0.8), 0 0 40px rgba(0,183,255,0.6);
+  }
+}
+
+/* --- MOBILE RESPONSIVE --- */
+@media(max-width: 768px) {
+  body { padding: 10px; }
+  .container { min-height: 95vh; border-radius: 25px; padding: 40px 20px; }
+  .title { font-size: 36px; }
+  .desc { font-size: 13px; }
+  .category button { padding: 8px 16px; font-size: 10px; }
+  .slider-wrap { margin-top: 30px; }
+  .card-inner { height: 450px; }
+  .overlay h2 { font-size: 22px; }
+  .nav { padding: 0; }
+  .nav button { width: 45px; height: 45px; font-size: 16px; }
+  .popup-top { padding: 20px; }
+  .popup-gallery { grid-template-columns: 1fr; padding: 20px; }
+  .popup-gallery img { height: 200px; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-button">
+  <a href="index.html">MAIN PAGE</a>
+</div>
+
+<div class="bg" id="bg-container">
+  <div class="blur one"></div>
+  <div class="blur two"></div>
+  </div>
+
+<div class="container">
+  <div class="top">
+    <div class="mini">WILD C4RD</div>
+    <div class="title">MEMORIES<br>OF TIME</div>
+    <div class="desc">14 October 2025</div>
+  </div>
+
+  <div class="category">
+    <button class="active">TIERRA ROBADA</button>
+    <button>OCEAN DOCKS</button>
+    <button>DOWNTOWN</button>
+    <button>TOGETHERNESS</button>
+  </div>
+
+  <div class="slider-wrap">
+    <div class="slider">
+      <div class="track" id="track">
+        
+        <div class="card">
+          <div class="card-inner">
+            <img src="https://i.imgur.com/ZVv6dFo.png" alt="Tierra Robada">
+            <div class="overlay">
+              <h2>TIERRA ROBADA</h2>
+              <p>After gaining territory.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-inner">
+            <img src="https://i.imgur.com/82ilNDb.png" alt="Highway">
+            <div class="overlay">
+              <h2>OCEAN DOCKS</h2>
+              <p>After gaining territory.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-inner">
+            <img src="https://i.imgur.com/Pt59Iac.png" alt="Meetup">
+            <div class="overlay">
+              <h2>DOWNTOWN</h2>
+              <p>After gaining territory.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-inner">
+            <img src="https://i.imgur.com/gHzZOQ6.png" alt="Garage">
+            <div class="overlay">
+              <h2>TOGETHERNESS</h2>
+              <p>The past, before the loss.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="nav">
+      <button id="prev">❮</button>
+      <button id="next">❯</button>
+    </div>
+  </div>
+
+  <div class="dots">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+</div>
+
+<div class="popup" id="popup">
+  <div class="popup-box">
+    <div class="popup-top">
+      <h2 id="popupTitle">TIERRA ROBADA</h2>
+      <span id="closePopup">✕</span>
+    </div>
+    <div class="popup-gallery">
+      <img src="https://i.imgur.com/ZVv6dFo.png" alt="Gallery Image 1">
+      <img src="https://i.imgur.com/xBykbpP.png" alt="Gallery Image 2">
+      <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=1200&auto=format&fit=crop" alt="Gallery Image 3">
+      <img src="https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?q=80&w=1200&auto=format&fit=crop" alt="Gallery Image 4">
+    </div>
+  </div>
+</div>
+
+<script>
+// --- LOGIKA PARTIKEL "NEON SPARKS" ---
+function createSparks() {
+  const bg = document.getElementById('bg-container');
+  const colors = ['#00b7ff', '#ff0055', '#ffffff'];
+  
+  for (let i = 0; i < 20; i++) {
+    let spark = document.createElement('div');
+    spark.classList.add('spark');
+    
+    // Randomize posisi, warna, ukuran, dan durasi
+    let left = Math.random() * 100;
+    let size = Math.random() * 3 + 1;
+    let duration = Math.random() * 4 + 3;
+    let delay = Math.random() * 5;
+    let color = colors[Math.floor(Math.random() * colors.length)];
+    
+    spark.style.left = left + 'vw';
+    spark.style.width = size + 'px';
+    spark.style.height = size + 'px';
+    spark.style.background = color;
+    spark.style.boxShadow = `0 0 10px 2px ${color}`;
+    spark.style.animationDuration = duration + 's';
+    spark.style.animationDelay = delay + 's';
+    
+    bg.appendChild(spark);
+  }
+}
+createSparks();
+
+// --- LOGIKA SLIDER ---
+const track = document.getElementById('track');
+const dots = document.querySelectorAll('.dot');
+const cards = document.querySelectorAll('.card');
+const total = cards.length;
+const categoryButtons = document.querySelectorAll('.category button');
+
+let index = 0;
+
+function updateSlider() {
+  track.style.transform = `translateX(-${index * 100}%)`;
+  dots.forEach(dot => dot.classList.remove('active'));
+  dots[index].classList.add('active');
+}
+
+// Interaksi Kategori
+categoryButtons.forEach((btn, i) => {
+  btn.addEventListener('click', () => {
+    categoryButtons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    index = i < total ? i : 0; 
+    updateSlider();
+  });
+});
+
+// Interaksi Dots
+dots.forEach((dot, i) => {
+  dot.addEventListener('click', () => {
+    index = i;
+    updateSlider();
+  });
+});
+
+// Tombol Next / Prev
+document.getElementById('next').onclick = () => {
+  index = (index + 1) >= total ? 0 : index + 1;
+  updateSlider();
+};
+
+document.getElementById('prev').onclick = () => {
+  index = (index - 1) < 0 ? total - 1 : index - 1;
+  updateSlider();
+};
+
+// Swipe Gestures untuk Mobile
+let startX = 0;
+track.addEventListener('touchstart', (e) => {
+  startX = e.touches[0].clientX;
+});
+
+track.addEventListener('touchend', (e) => {
+  let endX = e.changedTouches[0].clientX;
+  let diff = startX - endX;
+
+  if (diff > 50) {
+    index = (index + 1) >= total ? 0 : index + 1;
+  } else if (diff < -50) {
+    index = (index - 1) < 0 ? total - 1 : index - 1;
+  }
+  updateSlider();
+});
+
+// --- LOGIKA POPUP ---
+const popup = document.getElementById('popup');
+const closePopup = document.getElementById('closePopup');
+const popupTitle = document.getElementById('popupTitle');
+const popupGallery = document.querySelector('.popup-gallery');
+
+// 1. Buat Database Gambar Sederhana
+// Kamu bisa mengganti link URL di bawah ini dengan link gambarmu sendiri
+const galleryData = {
+  "TIERRA ROBADA": [
+    "https://i.imgur.com/ZVv6dFo.png",
+    "https://i.imgur.com/xBykbpP.png",
+    "https://i.imgur.com/z4n1LBD.png",
+    "https://i.imgur.com/9OoqIi3.png"
+  ],
+  "OCEAN DOCKS": [
+    "https://i.imgur.com/82ilNDb.png",
+    "https://i.imgur.com/pVPlVXU.png",
+    "https://i.imgur.com/qmSGPt0.png",
+    "https://i.imgur.com/6aKb29z.png"
+  ],
+  "DOWNTOWN": [
+    "https://i.imgur.com/Pt59Iac.png",
+    "https://i.imgur.com/0b6hdze.png",
+    "https://i.imgur.com/8wTAXgQ.png",
+    "https://i.imgur.com/JuqJDW8.png"
+  ],
+  "TOGETHERNESS": [
+    "https://i.imgur.com/gHzZOQ6.png",
+    "https://i.imgur.com/5ot6sDt.png",
+    "https://i.imgur.com/Fzf46As.png",
+    "https://i.imgur.com/xVmEAZx.png"
+  ]
+};
+
+document.querySelectorAll('.card-inner').forEach(card => {
+  card.addEventListener('click', () => {
+    // 2. Ambil judul dari kartu yang diklik
+    const title = card.querySelector('h2').innerText;
+    popupTitle.innerText = title;
+    
+    // 3. Kosongkan isi gallery popup sebelumnya
+    popupGallery.innerHTML = '';
+
+    // 4. Masukkan gambar baru berdasarkan judul kartu
+    // Jika judul tidak ada di database, gunakan TIERRA ROBADA sebagai default
+    const images = galleryData[title] || galleryData["TIERRA ROBADA"]; 
+    
+    images.forEach((src, index) => {
+      const imgElement = document.createElement('img');
+      imgElement.src = src;
+      imgElement.alt = `${title} Image ${index + 1}`;
+      popupGallery.appendChild(imgElement);
+    });
+    
+    // 5. Animasi memunculkan popup
+    popup.classList.remove('active');
+    setTimeout(() => {
+      popup.classList.add('active');
+    }, 50);
+  });
+});
+
+closePopup.addEventListener('click', () => {
+  popup.classList.remove('active');
+});
+
+// Tutup saat area luar diklik
+popup.addEventListener('click', (e) => {
+  if (e.target === popup) {
+    popup.classList.remove('active');
+  }
+});
+
+</script>
+
+</body>
+</html>
